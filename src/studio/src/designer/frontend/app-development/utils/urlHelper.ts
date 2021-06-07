@@ -1,21 +1,19 @@
-/* tslint:disable: max-line-length */
-const { org, app } = window as Window as IAltinnWindow;
-const origin = window.location.origin;
+const {
+  location, org, repo,
+} = window as Window as IAltinnWindow;
+const { origin } = location;
 
-export const getRepoStatusUrl = (): string => {
-  return `${origin}/designerapi/Repository/RepoStatus?org=${org}&repository=${app}`;
-};
-
-export const releasesUrlPost: string = `${origin}/designer/api/v1/${org}/${app}/releases`;
-export const releasesUrlGet: string = `${releasesUrlPost}?sortBy=created&sortDirection=Descending`;
-export const languageUrl: string = `${origin}/designerapi/Language/GetLanguageAsJSON`;
-export const getOrgsListUrl: string = 'https://altinncdn.no/orgs/altinn-orgs.json';
+export const repoStatusUrl = `${origin}/designerapi/Repository/RepoStatus?org=${org}&repository=${repo}`;
+export const releasesPostUrl = `${origin}/designer/api/v1/${org}/${repo}/releases`;
+export const releasesGetUrl = `${releasesPostUrl}?sortBy=created&sortDirection=Descending`;
+export const languageUrl = `${origin}/designerapi/Language/GetLanguageAsJSON`;
+export const orgsListUrl = 'https://altinncdn.no/orgs/altinn-orgs.json';
 
 export const getReleaseBuildPipelineLink = (buildId: string) => `https://dev.azure.com/brreg/altinn-studio/_build/results?buildId=${buildId}`;
 
-export const getGitCommitLink = (commitId: string) => `${origin}/repos/${org}/${app}/commit/${commitId}`;
+export const getGitCommitLink = (commitId: string) => `${origin}/repos/${org}/${repo}/commit/${commitId}`;
 
-export const getAzureDevopsBuildResultUrl = (buildId: string|number): string => {
+export const getAzureDevopsBuildResultUrl = (buildId: string | number): string => {
   return `https://dev.azure.com/brreg/altinn-studio/_build/results?buildId=${buildId}`;
 };
 
@@ -24,23 +22,23 @@ export const getEnvironmentsConfigUrl = (): string => {
 };
 
 export const getAppDeploymentsUrl = () => {
-  return `${origin}/designer/api/v1/${org}/${app}/Deployments`;
+  return `${origin}/designer/api/v1/${org}/${repo}/Deployments`;
 };
 
 export const getFetchDataModelUrl = (modelName: string) => {
-  return `${origin}/designer/api/${org}/${app}/datamodels/GetDatamodel?modelName=${encodeURIComponent(modelName)}`;
+  return `${origin}/designer/api/${org}/${repo}/datamodels/GetDatamodel?modelName=${encodeURIComponent(modelName)}`;
 };
 
 export const getSaveDataModelUrl = (modelName: string) => {
-  return `${origin}/designer/api/${org}/${app}/datamodels/UpdateDatamodel?modelName=${encodeURIComponent(modelName)}`;
+  return `${origin}/designer/api/${org}/${repo}/datamodels/UpdateDatamodel?modelName=${encodeURIComponent(modelName)}`;
 };
 
 export const getDeleteDataModelUrl = (modelName: string) => {
-  return `${origin}/designer/api/${org}/${app}/datamodels/DeleteDatamodel?modelName=${encodeURIComponent(modelName)}`;
+  return `${origin}/designer/api/${org}/${repo}/datamodels/DeleteDatamodel?modelName=${encodeURIComponent(modelName)}`;
 };
 
 export const getFetchDeployPermissionsUrl = () => {
-  return `${origin}/designer/api/v1/${org}/${app}/deployments/permissions`;
+  return `${origin}/designer/api/v1/${org}/${repo}/deployments/permissions`;
 };
 
 export const getRemainingSessionTimeUrl = () => {

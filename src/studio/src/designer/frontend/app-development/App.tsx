@@ -19,6 +19,9 @@ import LeftDrawerMenu from 'app-shared/navigation/drawer/LeftDrawerMenu';
 import AppBarComponent from 'app-shared/navigation/main-header/appBar';
 import altinnTheme from 'app-shared/theme/altinnStudioTheme';
 import postMessages from 'app-shared/utils/postMessages';
+import AltinnPopoverSimple from 'app-shared/components/molecules/AltinnPopoverSimple';
+import { Typography } from '@material-ui/core';
+import { getLanguageFromKey } from 'app-shared/utils/language';
 import NavigationActionDispatcher from './actions/navigationActions/navigationActionDispatcher';
 import './App.css';
 import { redirects } from './config/redirects';
@@ -29,11 +32,8 @@ import { fetchRepoStatus } from './features/handleMergeConflict/handleMergeConfl
 import { makeGetRepoStatusSelector } from './features/handleMergeConflict/handleMergeConflictSelectors';
 import { ApplicationMetadataActions } from './sharedResources/applicationMetadata/applicationMetadataSlice';
 import { fetchLanguage } from './utils/fetchLanguage/languageSlice';
-import { getRepoStatusUrl } from './utils/urlHelper';
+import { repoStatusUrl } from './utils/urlHelper';
 import { fetchRemainingSession, keepAliveSession, signOutUser } from './sharedResources/user/userSlice';
-import AltinnPopoverSimple from 'app-shared/components/molecules/AltinnPopoverSimple';
-import { Typography } from '@material-ui/core';
-import { getLanguageFromKey } from 'app-shared/utils/language';
 
 const theme = createMuiTheme(altinnTheme);
 
@@ -102,13 +102,13 @@ class App extends React.Component<IServiceDevelopmentProps, IServiceDevelopmentA
   }
 
   public componentDidMount() {
-    const { org, app } = window as Window as IAltinnWindow;
+    const { org, repo } = window as Window as IAltinnWindow;
     this.props.dispatch(fetchLanguage({
       url: `${window.location.origin}/designerapi/Language/GetLanguageAsJSON`,
       languageCode: 'nb',
     }));
     this.props.dispatch(HandleServiceInformationActions.fetchServiceName({
-      url: `${window.location.origin}/designer/${org}/${app}/Text/GetServiceName`,
+      url: `${window.location.origin}/designer/${org}/${repo}/Text/GetServiceName`,
     }));
     this.props.dispatch(ApplicationMetadataActions.getApplicationMetadata());
     this.props.dispatch(fetchRemainingSession());
@@ -123,13 +123,12 @@ class App extends React.Component<IServiceDevelopmentProps, IServiceDevelopmentA
   }
 
   public checkForMergeConflict = () => {
-    const { org, app } = window as Window as IAltinnWindow;
-    const repoStatusUrl = getRepoStatusUrl();
+    const { org, repo } = window as Window as IAltinnWindow;
 
     this.props.dispatch(fetchRepoStatus({
       url: repoStatusUrl,
       org,
-      repo: app,
+      repo,
     }));
   }
 
@@ -185,32 +184,32 @@ class App extends React.Component<IServiceDevelopmentProps, IServiceDevelopmentA
 
   public render() {
     const { classes, repoStatus } = this.props;
-    const { org, app } = window as Window as IAltinnWindow;
+    const { org, repo } = window as Window as IAltinnWindow;
 
     return (
       <React.Fragment>
         <MuiThemeProvider theme={theme}>
           <Router>
             <div className={classes.container} ref={this.state.sessionExpiredPopoverRef}>
-            <AltinnPopoverSimple
-              anchorEl={(this.state.remainingSessionMinutes < 11) ? this.state.sessionExpiredPopoverRef : null}
-              anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-              transformOrigin={{vertical: 'top', horizontal: 'center'}}
-              handleClose={(event: string) => this.handleSessionExpiresClose(event)}
-              btnCancelText={getLanguageFromKey('general.sign_out', this.props.language)}
-              btnConfirmText={getLanguageFromKey('general.continue', this.props.language)}
-              btnClick={this.handleSessionExpiresClose}
-              paperProps={{ style: { margin: '2.4rem' }}}
-              children={
-                <>
-                  <Typography variant={'h2'}>
-                    {getLanguageFromKey('session.expires', this.props.language)}
-                  </Typography>
-                  <Typography variant={'body1'} style={{ marginTop: '1.6rem'} }>
-                    {getLanguageFromKey('session.inactive', this.props.language)}
-                  </Typography>
-                </>
-              }
+              <AltinnPopoverSimple
+                anchorEl={(this.state.remainingSessionMinutes < 11) ? this.state.sessionExpiredPopoverRef : null}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+                handleClose={(event: string) => this.handleSessionExpiresClose(event)}
+                btnCancelText={getLanguageFromKey('general.sign_out', this.props.language)}
+                btnConfirmText={getLanguageFromKey('general.continue', this.props.language)}
+                btnClick={this.handleSessionExpiresClose}
+                paperProps={{ style: { margin: '2.4rem' } }}
+                children={
+                  <>
+                    <Typography variant={'h2'}>
+                      {getLanguageFromKey('session.expires', this.props.language)}
+                    </Typography>
+                    <Typography variant={'body1'} style={{ marginTop: '1.6rem' }}>
+                      {getLanguageFromKey('session.inactive', this.props.language)}
+                    </Typography>
+                  </>
+                }
               />
               <Grid container={true} direction='row'>
                 <Grid item={true} xs={12}>
@@ -240,7 +239,7 @@ class App extends React.Component<IServiceDevelopmentProps, IServiceDevelopmentA
                         activeSubHeaderSelection={route.activeSubHeaderSelection}
                         logoutButton={repoStatus.hasMergeConflict}
                         org={org}
-                        app={app}
+                        app={repo}
                         showBreadcrumbOnTablet={true}
                         showSubHeader={!repoStatus.hasMergeConflict}
                       />}

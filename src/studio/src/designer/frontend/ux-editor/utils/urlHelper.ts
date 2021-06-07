@@ -1,5 +1,8 @@
-const altinnWindow: IAltinnWindow = window as Window as IAltinnWindow;
-const basePath = `${altinnWindow.location.origin}/designer/${altinnWindow.org}/${altinnWindow.app}`;
+const {
+  location, org, repo,
+} = window as Window as IAltinnWindow;
+const { origin } = location;
+const basePath = `${origin}/designer/${org}/${repo}`;
 
 export const getFetchFormLayoutUrl = (): string => {
   return `${basePath}/UIEditor/GetFormLayout`;
@@ -26,22 +29,18 @@ export const getSaveLayoutSettingsUrl = (): string => {
 };
 
 export const getSaveServiceConfigurationUrl = (): string => {
-  /* tslint:disable-next-line:max-line-length */
   return `${basePath}/UIEditor/SaveJsonFile?fileName=RuleConfiguration.json`;
 };
 
 export const getAddApplicationMetadataUrl = (): string => {
-  /* tslint:disable-next-line:max-line-length */
   return `${basePath}/UIEditor/AddMetadataForAttachment`;
 };
 
 export const getDeleteApplicationMetadataUrl = (): string => {
-  /* tslint:disable-next-line:max-line-length */
   return `${basePath}/UIEditor/DeleteMetadataForAttachment?id=`;
 };
 
 export const getUpdateApplicationMetadataUrl = (): string => {
-  /* tslint:disable-next-line:max-line-length */
   return `${basePath}/UIEditor/UpdateMetadataForAttachment`;
 };
 
@@ -70,7 +69,7 @@ export const getFetchDataModelUrl = () => {
 };
 
 export const getFetchLanguageUrl = (languageCode: string) => {
-  return `${window.location.origin}/designerapi/Language/GetLanguageAsJSON?languageCode=${languageCode}`;
+  return `${origin}/designerapi/Language/GetLanguageAsJSON?languageCode=${languageCode}`;
 };
 
 export const getFetchRuleModelUrl = () => {
@@ -78,5 +77,5 @@ export const getFetchRuleModelUrl = () => {
 };
 
 export const getFetchRuleConfigurationUrl = () => {
-  return `${basePath}/UIEditor/GetJsonFile?fileName=RuleConfiguration.json`
+  return `${basePath}/UIEditor/GetJsonFile?fileName=RuleConfiguration.json`;
 };
